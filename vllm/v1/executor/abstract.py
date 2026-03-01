@@ -121,9 +121,8 @@ class Executor(ABC):
         # process config is never updated. Use max across workers since they
         # compile in parallel.
         if compilation_times:
-            self.vllm_config.compilation_config.compilation_time = max(
-                compilation_times
-            )
+            valid_times = [t for t in compilation_times if t is not None]
+            self.vllm_config.compilation_config.compilation_time = max(valid_times) if valid_times else 0
 
     def register_failure_callback(self, callback: FailureCallback):  # noqa: B027
         """
