@@ -71,6 +71,10 @@ if TYPE_CHECKING:
     VLLM_VIDEO_LOADER_BACKEND: str = "opencv"
     VLLM_MEDIA_CONNECTOR: str = "http"
     VLLM_MM_HASHER_ALGORITHM: str = "blake3"
+    VLLM_METAL_USE_MLX: int = 1
+    VLLM_MLX_DEVICE: str = "gpu"
+    VLLM_METAL_MEMORY_FRACTION: str = "auto"
+    VLLM_USE_RAY_COMPILED_DAG: int = 1
     VLLM_TARGET_DEVICE: str = "cuda"
     VLLM_MAIN_CUDA_VERSION: str = "12.9"
     VLLM_FLOAT32_MATMUL_PRECISION: Literal["highest", "high", "medium"] = "highest"
@@ -474,6 +478,10 @@ environment_variables: dict[str, Callable[[], Any]] = {
     # ================== Installation Time Env Vars ==================
     # Target device of vLLM, supporting [cuda (by default),
     # rocm, cpu]
+    "VLLM_METAL_USE_MLX": lambda: int(os.getenv("VLLM_METAL_USE_MLX", "1")),
+    "VLLM_MLX_DEVICE": lambda: os.getenv("VLLM_MLX_DEVICE", "gpu"),
+    "VLLM_METAL_MEMORY_FRACTION": lambda: os.getenv("VLLM_METAL_MEMORY_FRACTION", "auto"),
+    "VLLM_USE_RAY_COMPILED_DAG": lambda: int(os.getenv("VLLM_USE_RAY_COMPILED_DAG", "1")),
     "VLLM_TARGET_DEVICE": lambda: os.getenv("VLLM_TARGET_DEVICE", "cuda").lower(),
     # Main CUDA version of vLLM. This follows PyTorch but can be overridden.
     "VLLM_MAIN_CUDA_VERSION": lambda: os.getenv("VLLM_MAIN_CUDA_VERSION", "").lower()
