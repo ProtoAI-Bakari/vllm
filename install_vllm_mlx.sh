@@ -35,8 +35,8 @@ echo "=> [4] Injecting strict dependency bounds..."
 pip install -r vllm-metal/requirements.txt
 
 echo "=> [5] Compiling Core and Metal Plugin (No-Deps)..."
-pip install --no-deps -e ./vllm
-pip install --no-deps -e ./vllm-metal
+pip install -c vllm-metal/requirements.txt -e ./vllm
+pip install -c vllm-metal/requirements.txt -e ./vllm-metal
 
 echo "============================================================"
 echo "✅ DEPLOYMENT SUCCESSFUL."
