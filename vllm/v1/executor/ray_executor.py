@@ -229,6 +229,7 @@ class RayDistributedExecutor(Executor):
                     **ray_remote_kwargs,
                 )(RayWorkerWrapper).remote(rpc_rank=rank)
 
+            self.workers.append(worker)
             worker_metadata.append(RayWorkerMetaData(worker=worker, created_rank=rank))
 
         worker_ips = ray.get(
@@ -269,7 +270,7 @@ class RayDistributedExecutor(Executor):
         )
         for i, item in enumerate(sorted_worker_metadata):
             item.adjusted_rank = i
-        self.workers = [item.worker for item in sorted_worker_metadata]
+        # self.workers = [item.worker for item in sorted_worker_metadata]  # OVERRIDDEN BY PR PATCH
         rerank_mapping = {
             item.created_rank: item.adjusted_rank for item in sorted_worker_metadata
         }
@@ -395,7 +396,7 @@ class RayDistributedExecutor(Executor):
                 rank = (pp_rank * self.parallel_config.tensor_parallel_size) + tp_rank
                 assert len(self.pp_tp_workers[pp_rank]) == tp_rank
                 assert pp_rank < len(self.pp_tp_workers)
-                self.pp_tp_workers[pp_rank].append(self.workers[rank])
+                if rank < len(self.workers): self.pp_tp_workers[pp_rank].append(self.workers[rank])
 
     def reinitialize_distributed(
         self, reconfig_request: ReconfigureDistributedRequest

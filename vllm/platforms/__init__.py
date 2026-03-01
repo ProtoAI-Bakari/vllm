@@ -223,6 +223,13 @@ def resolve_current_platform_cls_qualname() -> str:
     else:
         platform_cls_qualname = "vllm.platforms.interface.UnspecifiedPlatform"
         logger.debug("No platform detected, vLLM is running on UnspecifiedPlatform")
+    # ATOMIC DEFERRED FORCE: Bypass circular imports for Metal Plugin
+    try:
+        import importlib
+        importlib.import_module("vllm_metal")
+        return "vllm_metal.platform.MetalPlatform"
+    except (ImportError, ModuleNotFoundError):
+        pass
     return platform_cls_qualname
 
 
