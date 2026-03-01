@@ -53,12 +53,12 @@ try:
         def get_node_ip(self) -> str:
             import os, subprocess, sys
             if sys.platform == "darwin":
-            if_name = os.environ.get("GLOO_SOCKET_IFNAME")
-            if if_name:
-                try:
-                    ip = subprocess.check_output(["ipconfig", "getifaddr", if_name], encoding="utf-8").strip()
-                    if ip: return ip
-                except Exception: pass
+                if_name = os.environ.get("GLOO_SOCKET_IFNAME")
+                if if_name:
+                    try:
+                        ip = subprocess.check_output(["ipconfig", "getifaddr", if_name], encoding="utf-8").strip()
+                        if ip: return ip
+                    except Exception: pass
             from vllm.utils import get_ip
             return os.environ.get("VLLM_HOST_IP", get_ip())
 
