@@ -51,16 +51,16 @@ try:
             self.compiled_dag_cuda_device_set = False
 
         def get_node_ip(self) -> str:
-        import os, subprocess, sys
-        if sys.platform == "darwin":
+            import os, subprocess, sys
+            if sys.platform == "darwin":
             if_name = os.environ.get("GLOO_SOCKET_IFNAME")
             if if_name:
                 try:
                     ip = subprocess.check_output(["ipconfig", "getifaddr", if_name], encoding="utf-8").strip()
                     if ip: return ip
                 except Exception: pass
-        from vllm.utils import get_ip
-        return os.environ.get("VLLM_HOST_IP", get_ip())
+            from vllm.utils import get_ip
+            return os.environ.get("VLLM_HOST_IP", get_ip())
 
         def get_node_and_gpu_ids(self) -> tuple[str, list[int]]:
             node_id = ray.get_runtime_context().get_node_id()
