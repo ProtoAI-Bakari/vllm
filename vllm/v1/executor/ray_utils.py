@@ -59,7 +59,7 @@ try:
                         ip = subprocess.check_output(["ipconfig", "getifaddr", if_name], encoding="utf-8").strip()
                         if ip: return ip
                     except Exception: pass
-            from vllm.utils import get_ip
+            from vllm.utils.network_utils import get_ip
             return os.environ.get("VLLM_HOST_IP", get_ip())
 
         def get_node_and_gpu_ids(self) -> tuple[str, list[int]]:

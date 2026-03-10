@@ -236,7 +236,7 @@ def _model_hash_key(fn: Callable[..., Any]) -> str:
     import vllm
 
     sha256_hash = hashlib.sha256()
-    sha256_hash.update(vllm.__version__.encode())
+    sha256_hash.update(vllm.version.__version__.encode())
     sha256_hash.update(fn.__qualname__.encode())
     sha256_hash.update(str(fn.__code__.co_firstlineno).encode())
     return sha256_hash.hexdigest()
