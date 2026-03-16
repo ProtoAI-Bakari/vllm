@@ -63,6 +63,10 @@ set(TORCH_SUPPORTED_VERSION_ROCM "2.10.0")
 # Try to find python package with an executable that exactly matches
 # `VLLM_PYTHON_EXECUTABLE` and is one of the supported versions.
 #
+if (NOT VLLM_PYTHON_EXECUTABLE AND DEFINED ENV{VLLM_PYTHON_EXECUTABLE})
+  set(VLLM_PYTHON_EXECUTABLE "$ENV{VLLM_PYTHON_EXECUTABLE}")
+endif()
+
 if (VLLM_PYTHON_EXECUTABLE)
   find_python_from_executable(${VLLM_PYTHON_EXECUTABLE} "${PYTHON_SUPPORTED_VERSIONS}")
 else()
