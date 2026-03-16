@@ -8,7 +8,7 @@ set -euo pipefail
 ENV_NAME="vLLM_0160_Ray_02540_CUDA_Disagg"
 VENV_DIR="$HOME/.venvs/$ENV_NAME"
 WHEEL_DIR="/repo/models/RUN/WHEELS"
-TARGET_PYTHON="3.12"
+TARGET_PYTHON="3.12.10"
 
 echo "============================================================"
 echo "🚀 INITIATING ATOMIC CUDA DISAGG DEPLOYMENT"
@@ -31,6 +31,7 @@ fi
 # 2. Virtual Environment
 echo "=> [2] Forging Python $TARGET_PYTHON Environment in ~/.venvs/..."
 rm -rf "$VENV_DIR"
+uv python install "$TARGET_PYTHON"
 uv venv "$VENV_DIR" --python "$TARGET_PYTHON" --seed
 PY_BIN="$VENV_DIR/bin/python3"
 PIP_BIN="$VENV_DIR/bin/pip"
