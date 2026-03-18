@@ -151,6 +151,18 @@ def xpu_platform_plugin() -> str | None:
 
     return "vllm.platforms.xpu.XPUPlatform" if is_xpu else None
 
+def vulkan_platform_plugin() -> str | None:
+    is_vulkan = False
+    logger.debug("Checking if Vulkan platform is available.")
+    try:
+        import torch
+        if hasattr(torch, "is_vulkan_available") and torch.is_vulkan_available():
+            is_vulkan = True
+            logger.debug("Confirmed Vulkan platform is available.")
+    except Exception as e:
+        logger.debug("Vulkan platform is not available because: %s", str(e))
+
+    return "vllm.platforms.vulkan.VulkanPlatform" if is_vulkan else None
 
 def _is_amd_zen_cpu() -> bool:
     """Detect AMD CPU with AVX-512 via /proc/cpuinfo."""
@@ -207,6 +219,7 @@ builtin_platform_plugins = {
     "cuda": cuda_platform_plugin,
     "rocm": rocm_platform_plugin,
     "xpu": xpu_platform_plugin,
+    "vulkan": vulkan_platform_plugin,
     "cpu": cpu_platform_plugin,
 }
 
@@ -225,7 +238,7 @@ def resolve_current_platform_cls_qualname() -> str:
 #        try:
 #            assert callable(func)
 #            platform_cls_qualname = func()
-#            if platform_cls_qualname is not None:
+#            if platform_cls_qualname is not None:builtin_platform_plugins = {
 #                activated_plugins.append(name)
 #        except Exception:
 #            pass

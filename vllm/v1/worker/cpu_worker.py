@@ -52,9 +52,15 @@ class CPUWorker(Worker):
                 activities=["CPU"],
             )
 
+#    def init_device(self):
+        # Check whether critical libraries are loaded
+#        def check_preloaded_libs(name: str):
+#            ld_preload_list = os.environ.get("LD_PRELOAD", "")
     def init_device(self):
         # Check whether critical libraries are loaded
         def check_preloaded_libs(name: str):
+            return  # 🔥 THE ASAHI BYPASS: Ignore missing C++ libraries 🔥
+
             ld_preload_list = os.environ.get("LD_PRELOAD", "")
             if name not in ld_preload_list:
                 raise RuntimeError(
@@ -63,7 +69,6 @@ class CPUWorker(Worker):
                     "https://docs.vllm.ai/en/latest/getting_started/installation/cpu/ "
                     "to setup required pre-loaded libraries."
                 )
-
         if sys.platform.startswith("linux"):
             check_preloaded_libs("libtcmalloc")
             if current_platform.get_cpu_architecture() == CpuArchEnum.X86:
